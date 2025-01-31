@@ -9,6 +9,12 @@ function App() {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const chatContainerRef = useRef(null);
 
+  // 🔹 Definir URL da API automaticamente
+  const LOCAL_API = "http://localhost:8000/api/chat"; // Para rodar localmente
+  const NGROK_API = "https://aa50-189-1-166-134.ngrok-free.app/api/chat"; // Insira o link do ngrok aqui
+
+  const API_URL = NGROK_API; // 🔹 Altere para LOCAL_API se for rodar localmente
+
   useEffect(() => {
     const savedMessages = localStorage.getItem("chatHistory");
     if (savedMessages) {
@@ -25,10 +31,9 @@ function App() {
   useEffect(() => {
     chatContainerRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, typingResponse]);
-  
 
   const handleChat = async () => {
-    if (!userInput) {
+    if (!userInput.trim()) {
       setError("Por favor, insira uma mensagem.");
       return;
     }
@@ -40,11 +45,9 @@ function App() {
     setMessages((prevMessages) => [...prevMessages, newMessage]);
 
     try {
-      const res = await fetch("http://localhost:8000/api/chat", {
+      const res = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ user_input: userInput }),
       });
 
@@ -53,10 +56,10 @@ function App() {
       }
 
       const result = await res.json();
-      const chatResponse = result.chat_response?.raw || result.chat_response?.description || "Erro ao gerar resposta.";
-      const citationResponse = result.citation_response?.raw || result.citation_response?.description || "Nenhuma citação encontrada.";
+      const chatResponse = result.chat_response || "Erro ao gerar resposta.";
+      const citationResponse = result.citation_response || "Nenhuma citação encontrada.";
 
-      const fullResponse = chatResponse + "\n\n📚 Referência: " + citationResponse;
+      const fullResponse = `${chatResponse}\n\n📚 Referência: ${citationResponse}`;
 
       simulateTyping(fullResponse);
     } catch (err) {
@@ -78,13 +81,10 @@ function App() {
         index++;
       } else {
         clearInterval(typingInterval);
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { role: "Assistente", content: text }
-        ]);
+        setMessages((prevMessages) => [...prevMessages, { role: "Assistente", content: text }]);
         setTypingResponse([]);
       }
-    }, 10);
+    }, 30); // 🔹 Ajuste a velocidade da digitação
   };
 
   const copyToClipboard = (text, index) => {
@@ -102,7 +102,9 @@ function App() {
     <div className="chat-container">
       <h1>💬 BOT 31-01-25</h1>
 
-      <button className="clear-button" onClick={clearChatHistory} title="Limpar Conversa">🗑️</button>
+      <button className="clear-button" onClick={clearChatHistory} title="Limpar Conversa">
+        🗑️
+      </button>
 
       <div className="chat-box">
         {messages.map((msg, index) => (
@@ -126,7 +128,11 @@ function App() {
         {typingResponse.length > 0 && (
           <div className="message assistant">
             <strong>Assistente:</strong>
-            <div className="formatted-text">{typingResponse.map((word, i) => <span key={i}>{word}</span>)}</div>
+            <div className="formatted-text">
+              {typingResponse.map((word, i) => (
+                <span key={i}>{word}</span>
+              ))}
+            </div>
           </div>
         )}
         <div ref={chatContainerRef}></div>
@@ -134,7 +140,9 @@ function App() {
 
       <div className="input-container">
         <input type="text" placeholder="Digite sua mensagem..." value={userInput} onChange={(e) => setUserInput(e.target.value)} className="input-box" />
-        <button onClick={handleChat} disabled={loading} className="send-button">{loading ? "⏳ Enviando..." : "➡️ Enviar"}</button>
+        <button onClick={handleChat} disabled={loading} className="send-button">
+          {loading ? "⏳ Enviando..." : "➡️ Enviar"}
+        </button>
       </div>
 
       {error && <p className="error-message">{error}</p>}
