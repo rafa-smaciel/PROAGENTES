@@ -1,0 +1,159 @@
+/* 🌙 Fundo escuro global */
+body, html {
+  background-color: #343541 !important;
+  color: white;
+  font-family: "Inter", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* 📦 Caixa de chat */
+.chat-container {
+  width: 90%;
+  max-width: 700px;
+  background: #444654;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 🗨️ Mensagens */
+.message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+  line-height: 1.5;
+  position: relative;
+}
+
+/* 💾 Estilização do botão de cópia */
+.copy-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: color 0.2s;
+}
+
+.copy-button:hover {
+  color: #fff;
+}
+
+/* 🚀 Entrada do chat */
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.input-box {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #555;
+  background: #222;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+/* 🚀 Botão de envio */
+.send-button {
+  background: #0ea5e9;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.send-button:hover {
+  background: #008ac9;
+}
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* 🗑️ Botão de limpar histórico */
+.clear-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 20px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+
+.clear-button:hover {
+  color: #fff;
+}
+
+/* 🤖 Efeito de "IA pensando..." */
+.thinking {
+  color: #aaa;
+  font-style: italic;
+  margin: 10px;
+  animation: fadeInOut 1.5s infinite;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* 📖 Ajuste no espaçamento entre parágrafos */
+.formatted-text p {
+  margin-bottom: 16px;
+  line-height: 1.7;
+  text-align: justify;
+}
+
+/* 🔠 Garante espaçamento correto na digitação progressiva */
+.formatted-text span {
+  display: inline;
+}
+
+/* 📦 Caixa de chat */
+.chat-box {
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #565869 #343541; /* Firefox */
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🎨 Customização da Barra de Rolagem */
+::-webkit-scrollbar {
+  width: 8px; /* Largura da barra */
+}
+
+::-webkit-scrollbar-track {
+  background: #343541; /* Fundo da barra de rolagem */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #565869; /* Cor do botão da barra */
+  border-radius: 10px;
+  transition: background 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #828282; /* Cor ao passar o mouse */
+}

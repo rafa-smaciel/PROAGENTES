@@ -1,0 +1,97 @@
+import React, { useState } from "react";
+
+function App() {
+  const [userInput, setUserInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [error, setError] = useState(null);
+
+  const handleChat = async () => {
+    if (!userInput) {
+      setError("Por favor, insira uma mensagem.");
+      return;
+    }
+  
+    setLoading(true);
+    setError(null);
+  
+    const newMessage = { role: "Usuário", content: userInput };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+  
+    try {
+      const res = await fetch("http://localhost:8000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_input: userInput }),
+      });
+  
+      if (!res.ok) {
+        throw new Error(`Erro: ${res.status} - ${res.statusText}`);
+      }
+  
+      const result = await res.json();
+  
+      console.log("Resposta da API:", result);
+  
+      // Verifica se há resposta útil antes de exibir erro
+      const responseText = result.raw_output !== "Erro ao processar resposta."
+        ? result.raw_output
+        : result.full_result || "Erro ao gerar resposta.";
+  
+      const assistantMessage = {
+        role: "Assistente",
+        content: responseText,
+      };
+  
+      setMessages((prevMessages) => [...prevMessages, assistantMessage]);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+      setUserInput("");
+    }
+  };
+  
+
+  return (
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+      <h1>💬 BOT 28-01-2025 Chat</h1>
+
+      <div
+        style={{
+          maxHeight: "400px",
+          overflowY: "auto",
+          marginBottom: "20px",
+          padding: "10px",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+        }}
+      >
+        {messages.map((msg, index) => (
+          <div key={index} style={{ marginBottom: "10px" }}>
+            <strong>{msg.role}:</strong> <span>{msg.content}</span>
+          </div>
+        ))}
+      </div>
+
+      <input
+        type="text"
+        placeholder="Digite sua mensagem"
+        value={userInput}
+        onChange={(e) => setUserInput(e.target.value)}
+        style={{ padding: "10px", width: "300px", marginRight: "10px" }}
+      />
+
+      <button onClick={handleChat} disabled={loading}>
+        {loading ? "Processando..." : "Enviar"}
+      </button>
+
+      {error && <p style={{ color: "red" }}>❌ Erro: {error}</p>}
+    </div>
+  );
+}
+
+export default App;
+// #teste;
