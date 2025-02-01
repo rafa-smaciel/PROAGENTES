@@ -11,7 +11,8 @@ function App() {
 
   // 🔹 Definir URL da API automaticamente
   const LOCAL_API = "http://localhost:8000/api/chat"; // Para rodar localmente
-  const NGROK_API = "https://aa50-189-1-166-134.ngrok-free.app/api/chat"; // Insira o link do ngrok aqui
+  const NGROK_API = "https://aa50-189-1-166-134.ngrok-free.app/api/chat";
+
 
   const API_URL = NGROK_API; // 🔹 Altere para LOCAL_API se for rodar localmente
 
